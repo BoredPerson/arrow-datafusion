@@ -90,7 +90,8 @@ macro_rules! digest_to_array {
             .map(|x| {
                 x.map(|x| {
                     let mut digest = $METHOD::default();
-                    digest.update(x);
+                    let bytes: &[u8] = x.as_ref();
+                    digest.update(bytes);
                     digest.finalize()
                 })
             })
@@ -120,6 +121,9 @@ impl DigestAlgorithm {
             Self::Sha512 => digest_to_scalar!(Sha512, value),
             Self::Blake2b => digest_to_scalar!(Blake2b512, value),
             Self::Blake2s => digest_to_scalar!(Blake2s256, value),
+            #[cfg(feature = "blake3_traits_preview")]
+            Self::Blake3 => digest_to_scalar!(Blake3, value),
+            #[cfg(not(feature = "blake3_traits_preview"))]
             Self::Blake3 => ScalarValue::Binary(value.map(|v| {
                 let mut digest = Blake3::default();
                 digest.update(v);
@@ -142,6 +146,9 @@ impl DigestAlgorithm {
             Self::Sha512 => digest_to_array!(Sha512, input_value),
             Self::Blake2b => digest_to_array!(Blake2b512, input_value),
             Self::Blake2s => digest_to_array!(Blake2s256, input_value),
+            #[cfg(feature = "blake3_traits_preview")]
+            Self::Blake3 => digest_to_array!(Blake3, input_value),
+            #[cfg(not(feature = "blake3_traits_preview"))]
             Self::Blake3 => {
                 let binary_array: BinaryArray = input_value
                     .iter()
@@ -173,6 +180,9 @@ impl DigestAlgorithm {
             Self::Sha512 => digest_to_array!(Sha512, input_value),
             Self::Blake2b => digest_to_array!(Blake2b512, input_value),
             Self::Blake2s => digest_to_array!(Blake2s256, input_value),
+            #[cfg(feature = "blake3_traits_preview")]
+            Self::Blake3 => digest_to_array!(Blake3, input_value),
+            #[cfg(not(feature = "blake3_traits_preview"))]
             Self::Blake3 => {
                 let binary_array: BinaryArray = input_value
                     .iter()

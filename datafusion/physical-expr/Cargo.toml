@@ -38,6 +38,8 @@ default = ["crypto_expressions", "regex_expressions", "unicode_expressions"]
 regex_expressions = ["regex"]
 unicode_expressions = ["unicode-segmentation"]
 
+blake3_traits_preview = ["blake3/traits-preview"]
+
 [dependencies]
 ahash = { version = "0.8", default-features = false, features = ["runtime-rng"] }
 arrow = { version = "29.0.0", features = ["prettyprint", "dyn_cmp_dict"] }
